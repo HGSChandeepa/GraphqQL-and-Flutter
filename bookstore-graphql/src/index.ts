@@ -2,8 +2,8 @@ import express, { Application } from "express";
 import mongoose from "mongoose";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import schema from "./schema"; // Import your GraphQL schema
-import resolvers from "./resolvers"; // Import your resolvers
+import schema from "./schema"; 
+import resolvers from "./resolvers";
 import cors from "cors";
 
 const app: Application = express();
