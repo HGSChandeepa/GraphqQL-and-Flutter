@@ -42,17 +42,14 @@ const resolvers = {
       try {
         const { name, bio } = args;
 
-        // Create a new Author instance
         const author = new Author({
           name,
           bio,
           books: [],
         });
 
-        // Save the author to the database
         await author.save();
 
-        // Return the newly created author
         return author;
       } catch (error: any) {
         throw new Error(`Failed to add author: ${error.message}`);
@@ -64,33 +61,27 @@ const resolvers = {
       try {
         const { title, authorId } = args;
 
-        // Convert the authorId to a valid mongoose ObjectId
         if (!mongoose.Types.ObjectId.isValid(authorId)) {
           throw new Error("Invalid authorId format");
         }
         const validAuthorId = new mongoose.Types.ObjectId(authorId);
 
-        // Check if the author exists
         const author = await Author.findById(validAuthorId);
         if (!author) {
           throw new Error("Author not found");
         }
 
-        // Create a new Book instance
         const book = new Book({
           title,
           author: validAuthorId,
-          reviews: [], // Initialize reviews as an empty array
+          reviews: [],
         });
 
-        // Save the book to the database
         await book.save();
 
-        // Add the book to the author's books array
         author.books.push(book._id);
         await author.save();
 
-        // Return the newly created book
         return {
           ...book.toObject(),
           author,
@@ -104,7 +95,6 @@ const resolvers = {
       try {
         const { bookId, readerId, content, rating } = args;
 
-        // Convert the bookId and readerId to valid mongoose ObjectIds
         if (!mongoose.Types.ObjectId.isValid(bookId)) {
           throw new Error("Invalid bookId format");
         }
@@ -115,7 +105,6 @@ const resolvers = {
         }
         const validReaderId = new mongoose.Types.ObjectId(readerId);
 
-        // Check if the book and reader exist
         const book = await Book.findById(validBookId);
         if (!book) {
           throw new Error("Book not found");
@@ -126,7 +115,6 @@ const resolvers = {
           throw new Error("Reader not found");
         }
 
-        // Create a new Review instance
         const review = new Review({
           book: validBookId,
           reader: validReaderId,
@@ -134,14 +122,11 @@ const resolvers = {
           rating,
         });
 
-        // Save the review to the database
         await review.save();
 
-        // Add the review to the book's reviews array
         book.reviews.push(review._id);
         await book.save();
 
-        // Return the newly created review
         return {
           ...review.toObject(),
           book,
@@ -157,16 +142,12 @@ const resolvers = {
       try {
         const { name, email } = args;
 
-        // Create a new Reader instance
         const reader = new Reader({
           name,
           email,
         });
 
-        // Save the reader to the database
         await reader.save();
-
-        // Return the newly created reader
         return reader;
       } catch (error: any) {
         throw new Error(`Failed to add reader: ${error.message}`);
