@@ -1,0 +1,40 @@
+//add author
+
+mutation addMutation ($name: String!, $bio: String!){
+  addAuthor(name: $name, bio: $bio) {
+    name,
+    bio,
+  }
+}
+
+
+//add book under author
+
+mutation addMutation ($title: String!, $authorId: ID!){
+ 
+ addBook(title: $title, authorId: $authorId) {
+  title,
+  author {
+    id
+  }
+ }
+}
+
+
+//add review under book
+
+mutation addMutation ($bookId: ID!, $readerId: ID!, $content: String!, $rating: Int!){
+ 
+addReview(bookId: $bookId, readerId: $readerId, content: $content, rating: $rating) {
+  book {
+    id
+  },
+  reader {
+    id
+  },
+  content,
+  rating
+
+}
+
+}
