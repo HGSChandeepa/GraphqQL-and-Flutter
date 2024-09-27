@@ -1,14 +1,14 @@
 import { stringify } from "querystring";
 import { Author, Reader, Book, Review } from "./models";
-import mongoose from "mongoose";
+import mongoose, { Query } from "mongoose";
 
 const resolvers = {
   Query: {
-    authors() {
-      return Author.find();
+    async authors() {
+      return await Author.find();
     },
-    readers() {
-      return Reader.find();
+    async readers() {
+      return await Reader.find();
     },
     async books(_: any, { authorId }: any) {
       if (authorId) {
@@ -22,6 +22,7 @@ const resolvers = {
       }
       return Review.find();
     },
+
     async author(_: any, { id }: any) {
       return Author.findById(id);
     },
@@ -37,11 +38,10 @@ const resolvers = {
   },
 
   Mutation: {
-    //add a new author
+    //add new author
     async addAuthor(_: any, args: any) {
       try {
         const { name, bio } = args;
-
         const author = new Author({
           name,
           bio,
@@ -49,7 +49,6 @@ const resolvers = {
         });
 
         await author.save();
-
         return author;
       } catch (error: any) {
         throw new Error(`Failed to add author: ${error.message}`);
@@ -95,6 +94,7 @@ const resolvers = {
         throw new Error(`Failed to add book: ${error.message}`);
       }
     },
+
     //add a new review for a book
     async addReview(_: any, args: any) {
       try {
@@ -141,7 +141,6 @@ const resolvers = {
         throw new Error(`Failed to add review: ${error.message}`);
       }
     },
-
     //add a new reader
     async addReader(_: any, args: any) {
       try {
