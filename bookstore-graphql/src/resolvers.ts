@@ -12,9 +12,9 @@ const resolvers = {
     },
     async books(_: any, { authorId }: any) {
       if (authorId) {
-        return Book.find({ authorId });
+        return Book.find({ authorId }).populate("author");
       }
-      return Book.find();
+      return Book.find().populate("author");
     },
     async reviews(_: any, { bookId }: any) {
       if (bookId) {
@@ -73,13 +73,18 @@ const resolvers = {
 
         const book = new Book({
           title,
-          author: validAuthorId,
+          author: {
+            _id: author._id,
+            name: author.name,
+            bio: author.bio,
+            books: author.books,
+          },
           reviews: [],
         });
 
         await book.save();
 
-        author.books.push(book._id);
+        author.books.push(book);
         await author.save();
 
         return {

@@ -37,7 +37,7 @@ const ReaderSchema = new Schema<IReader>({
 
 const BookSchema = new Schema<IBook>({
   title: { type: String, required: true },
-  author: { type: Schema.Types.ObjectId, ref: "Author" },
+  author: { type: Object, required: true },
   reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 });
 
